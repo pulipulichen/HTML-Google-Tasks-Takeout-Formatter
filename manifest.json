@@ -1,0 +1,21 @@
+{
+  "name": "Google Tasks Export Formatter",
+  "short_name": "Tasks轉CSV",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#f8fafc",
+  "background_color": "#f8fafc",
+  "description": "將 Google Tasks 的匯出檔依照「清單名稱」與「狀態」拆分為獨立的 CSV 檔案",
+  "icons": [
+    {
+      "src": "assets/favicon/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/favicon/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

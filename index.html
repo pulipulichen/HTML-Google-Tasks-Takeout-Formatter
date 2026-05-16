@@ -66,6 +66,7 @@
 
     <script>
         let generatedFiles = {};
+        let parsedListNames = []; // 儲存清單名稱，用於建立 ZIP 檔名
 
         // DOM Elements
         const dropZone = document.getElementById('dropZone');
@@ -142,6 +143,7 @@
         // Process Data Logic
         function processTasks(data) {
             generatedFiles = {}; // Reset
+            parsedListNames = []; // Reset list names
             
             if (!data.items || !Array.isArray(data.items)) {
                 showMessage("找不到任務清單，請確認這是 Google Tasks 匯出的 JSON 檔。", "error");
@@ -154,6 +156,10 @@
             data.items.forEach(list => {
                 const listTitle = sanitizeFilename(list.title || "未命名清單");
                 
+                if (!parsedListNames.includes(listTitle)) {
+                    parsedListNames.push(listTitle);
+                }
+
                 if (list.items && Array.isArray(list.items)) {
                     // Iterate through Tasks
                     list.items.forEach(task => {
@@ -238,7 +244,22 @@
                 const url = URL.createObjectURL(content);
                 const a = document.createElement("a");
                 a.href = url;
-                a.download = "Google_Tasks_Export.zip";
+
+                // 產生動態檔案名稱
+                const now = new Date();
+                const timeStr = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`;
+                
+                let listPart = "Tasks";
+                if (parsedListNames.length > 0) {
+                    // 取前兩個清單名稱作為檔名的一部分
+                    listPart = parsedListNames.slice(0, 2).join('_');
+                    if (parsedListNames.length > 2) {
+                        listPart += '_等';
+                    }
+                }
+                
+                a.download = `GoogleTasks_${listPart}_${timeStr}.zip`;
+                
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
